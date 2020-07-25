@@ -1,0 +1,20 @@
+Functions
+---------
+
+node_damage.damage(pos, node, digger, num)
+	--Give damage to this node, and set it into the next stage of cracking.
+	--For reference, there are four stages in total, including the stage without damage at all.
+	--When the highest stage is damaged, the nodes is finally destroyed, and the node is either given to the player who destroyed it,
+	--or left on the ground.
+	pos: The location of the node to damage
+	node: The node itself to damage. This is optional. It can be provided if available, but this function can get the node itself.
+	digger: Optional; the person who is damaging this node.
+	num: Optional; the amount of times to damage this node. If its 3 or more, the node will always be destroyed.
+
+node_damage.repair(pos, node, num)
+	--Remove damage from this node, and set it into the previous stage of cracking.
+	--For reference, there are four stages in total, including the stage without damage at all.
+	--If the node is already fully repaired, nothing will happen.
+	pos: The location of the node to repair
+	node: The node itself to damage. This is optional. It can be provided if available, but this function can get the node itself.
+	num: Optional; the amount of times to repair this node. If its 3 or more, the node will always be fully repaired.
