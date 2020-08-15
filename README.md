@@ -21,4 +21,4 @@ The LGPL v2.1 License is used with this mod. See https://www.gnu.org/licenses/ol
 -------------------------------------------------------------------------------------------------------------
 Installation
 -------------------------------------------------------------------------------------------------------------
-Download, unzip, and place within the usual minetest/current/mods folder, and it will behave in relation to the Minetest engine like any other mod. However, the first time its loaded, it won't do anything until the world is reloaded once. The reload is necessary so this mod can query all of the nodes that will exist in this world, which is necessary to automatically register cracked versions of them regardless of mod load order. This process will need repeating if any new mods are installed after this one.
+Download, unzip, and place within the usual minetest/current/mods folder, and it will behave in relation to the Minetest engine like any other mod.
