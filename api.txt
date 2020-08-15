@@ -8,13 +8,16 @@ node_damage.damage(pos, node, digger, num)
 	--or left on the ground.
 	pos: The location of the node to damage
 	node: The node itself to damage. This is optional. It can be provided if available, but this function can get the node itself.
-	digger: Optional; the person who is damaging this node.
+	digger: Optional; the person who is damaging this node. Used to determine protection permission.
 	num: Optional; the amount of times to damage this node. If its 3 or more, the node will always be destroyed.
+	--Returns a boolean indicating success.
 
-node_damage.repair(pos, node, num)
+node_damage.repair(pos, node, fixer, num)
 	--Remove damage from this node, and set it into the previous stage of cracking.
 	--For reference, there are four stages in total, including the stage without damage at all.
 	--If the node is already fully repaired, nothing will happen.
 	pos: The location of the node to repair
 	node: The node itself to damage. This is optional. It can be provided if available, but this function can get the node itself.
+	fixer: Optional; A person (ObjectRef) who is repairing this node. Used to determine protection permission.
 	num: Optional; the amount of times to repair this node. If its 3 or more, the node will always be fully repaired.
+	--Returns a boolean indicating success.

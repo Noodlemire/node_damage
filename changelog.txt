@@ -1,0 +1,5 @@
+1.0.1:
+	+node_damage.damage() and node_damage.repair() now return a boolean value to indicate success.
+	-Removed the need to reload the world a second time whenever new nodes are introduced. Now, the override character ":" is used to skip prohibitive modname checks.
+	-Prevented the use of node damaging and repair tools on nodes that are protected from the user, or are otherwise not meant to be broken.
+	-Fixed issue where node_damage.repair() with a num greater than 1 would start damaging nodes.
