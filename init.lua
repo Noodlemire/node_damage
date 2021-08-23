@@ -46,10 +46,13 @@ end
 
 --Once every mod has loaded and therefore every node has been registered...
 minetest.register_on_mods_loaded(function()
+	local queue = {}
+
 	--For each registered item...
-	for name, def in pairs(minetest.registered_items) do
+	for name, def in pairs(minetest.registered_nodes) do
 		--If there's a valid node...
 		if node_is_valid(name) then
+			--Start by overriding the valid node to let it know that it has a damaged variation.
 			local ndef = {node_damaged_name = get_node_damage_name(name, 1)}
 			minetest.override_item(name, ndef)
 
@@ -111,11 +114,17 @@ minetest.register_on_mods_loaded(function()
 					break
 				end
 
-				--Finally, forcefully register a new node while skipping the mod name prefix check,
-				--in order for it to work after all mods have been loaded.
-				minetest.register_node(":"..get_node_damage_name(name, i), def)
+				--Add the new node variation to a queue to be registered later.
+				--Trying to add new nodes while looping through their table can mess things up and cause some nodes to get skipped.
+				queue[":"..get_node_damage_name(name, i)] = def
 			end
 		end
+	end
+
+	--Finally, forcefully register each new node while skipping the mod name prefix check,
+	--in order for it to work after all mods have been loaded.
+	for name, def in pairs(queue) do
+		minetest.register_node(name, def)
 	end
 end)
 
@@ -150,15 +159,15 @@ function node_damage.damage(pos, node, digger, num)
 	local def = minetest.registered_items[node.name]
 
 	--If the def has no definition or specifies that it can't be dug right now, fail.
-	if not def or (def.can_dig and def.can_dig()) then
+	if not def or (def.can_dig and not def.can_dig()) then
 		return false
 	end
 
 	--If it defines a next stage of damage, swap to that next stage.
 	if def.node_damaged_name and minetest.registered_items[def.node_damaged_name] then
 		minetest.swap_node(pos, {name = def.node_damaged_name, param1 = node.param1, param2 = node.param2})
-	--Otherwise, if it doesn't because it's in the last stage of damage, destroy the node.
-	elseif def.groups.node_damage == 3 then
+	--Otherwise, if it doesn't because it's in the last stage of damage or able to be immediately dug, destroy the node.
+	elseif def.groups.node_damage == 3 or def.groups.dig_immediate > 0 then
 		--If a digger was provided, use node_dig to give the node to them.
 		if digger then
 			minetest.node_dig(pos, node, digger)
